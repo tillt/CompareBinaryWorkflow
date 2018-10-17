@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>AMApplicationBuild</key>
-	<string>444.38</string>
+	<string>444.39</string>
 	<key>AMApplicationVersion</key>
 	<string>2.9</string>
 	<key>AMDocumentVersion</key>
@@ -59,24 +59,26 @@
 				<key>ActionParameters</key>
 				<dict>
 					<key>COMMAND_STRING</key>
-					<string># Comparison of binary files via Kaleidoscope.
+					<string>#
+# Comparison of binary files via Kaleidoscope.
+#
 
 read first
 read second
 
 # Make sure we actually got two files.
-if [ -z $second ]; then
+if [ -z "${second}" ]; then
   osascript -e "display dialog \"We need two files. Select another one as well!\" buttons {\"OK\"} with title \"Compare Binary\"" 
   exit 0
 fi
 
-base_first=$(basename "$first")
-base_second=$(basename "$second")
+base_first=$(basename "${first}")
+base_second=$(basename "${second}")
 
-osascript -e "display notification \"$base_first vs. $base_second\" with title \"Comparing\""
+osascript -e "display notification \"${base_first} vs. ${base_second}\" with title \"Comparing\""
 
 # Compare those files to find out if they differ at all.
-if [ -z "$(cmp $first $second)" ]; then
+if [ -z $(cmp "${first}" "${second}") ]; then
   osascript -e "display dialog \"$base_first and $base_second are identical.\" buttons {\"OK\"} with title \"Compare Binary\"" 
   exit 0
 fi
@@ -84,12 +86,14 @@ fi
 # Create a temporary directory.
 mydir=$(mktemp -d "${TMPDIR:-/tmp/}CompareBinary.XXXXXXXXXXXX")
 
+ext="hex"
+
 # Create hex dumps from both files.
-xxd $first &gt;"$mydir/$base_first"
-xxd $second &gt;"$mydir/$base_second"
+xxd "${first}" &gt;"${mydir}/${base_first}.${ext}"
+xxd "${second}" &gt;"${mydir}/${base_second}.${ext}"
 
 # Use Kaleidoscope's `ksdiff` to show a nice comparison.
-/usr/local/bin/ksdiff "$mydir/$base_first" "$mydir/$base_second"
+/usr/local/bin/ksdiff "${mydir}/${base_first}.${ext}" "${mydir}/${base_second}.${ext}"
 </string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
@@ -203,7 +207,7 @@ xxd $second &gt;"$mydir/$base_second"
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>
-				<string>604.500000:692.000000</string>
+				<string>778.500000:859.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/Base.lproj/main.nib</string>
 			</dict>
